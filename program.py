@@ -236,14 +236,16 @@ while True:
             # If the player won, let them know
             if max_count >= 4:
                 clear_console()
+                print("Connect4 Implemented by Rizwan Mustafa (A1 2021)")
                 print_board(board)
                 print()
                 print(f"{player_one_name if player_one_turn else player_two_name} wins!")
 
                 user_choice = input("Play another game [Y/N]: ").lower()
                 if user_choice == "y":
+                    clear_console()
                     board = create_empty_board()
-                    player_one_turn = True
+                    player_one_turn = not player_one_turn
                     break
                 else:
                     exit()
@@ -251,14 +253,17 @@ while True:
             # If there is a draw, let them know
             if is_board_full(board):
                 clear_console()
+                print("Connect4 Implemented by Rizwan Mustafa (A1 2021)")
+                print()
                 print_board(board)
                 print()
                 print(f"Draw between Player 1({player_one_name}) and Player 2({player_two_name})!")
 
                 user_choice = input("Play another game [Y/N]: ").lower()
                 if user_choice == "y":
+                    clear_console()
                     board = create_empty_board()
-                    player_one_turn = True
+                    player_one_turn = not player_one_turn
                     break
                 else:
                     exit()
