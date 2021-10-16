@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 from typing import List
 
+
 def create_empty_board() -> List[List[bool]]:
-	board = []
+    board = []
 
-	for i in range(6):
-		board.append([None] * 7)
+    for i in range(6):
+        board.append([None] * 7)
 
-	return board
+    return board
+
 
 # Debug statements
 board = create_empty_board()
