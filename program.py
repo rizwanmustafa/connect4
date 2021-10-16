@@ -131,7 +131,39 @@ def get_increasing_diagonal_count(row: int, col: int, board: List[List[bool]]) -
 
 
 def get_decreasing_diagonal_count(row: int, col: int, board: List[List[bool]]) -> int:
-    pass
+    count: int = 1
+    temp_row: int = row
+    temp_col: int = col
+
+    base = board[row][col]
+
+    for i in range(3):
+        temp_row += 1
+        temp_col += 1
+        if not is_valid_row_col(temp_row, temp_col):
+            break
+
+        if board[temp_row][temp_col] == base:
+            count += 1
+        else:
+            break
+
+    temp_row: int = row
+    temp_col: int = col
+
+    for i in range(3):
+        temp_row -= 1
+        temp_col -= 1
+
+        if not is_valid_row_col(temp_row, temp_col):
+            break
+
+        if board[temp_row][temp_col] == base:
+            count += 1
+        else:
+            break
+
+    return count
 
 
 def is_valid_row_col(row: int = 0, col: int = 0) -> bool:
