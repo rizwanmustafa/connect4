@@ -188,6 +188,13 @@ def is_valid_row_col(row: int = 0, col: int = 0) -> bool:
     return True
 
 
+def get_player_text(player_one: bool, player_name: str):
+    if player_one:
+        return Fore.RED + f"Player 1 ({player_name}) " + Style.RESET_ALL
+    else:
+        return Fore.GREEN + f"Player 2 ({player_name}) " + Style.RESET_ALL
+
+
 def clear_console():
     command = 'clear'
     if os.name in ('nt', 'dos'):  # If Machine is running on Windows, use cls
@@ -205,6 +212,7 @@ clear_console()
 board = create_empty_board()
 player_one_turn: bool = True
 
+
 while True:
     print("Connect4 Implemented by Rizwan Mustafa (A1 2021)")
     print()
@@ -214,7 +222,7 @@ while True:
     # Keep taking input from the user until correct column is entered
     while True:
 
-        col = input(f"Player {1 if player_one_turn else 2} ({player_one_name if player_one_turn else player_two_name})  Enter column number for placing disc: ")
+        col = input(get_player_text(player_one_turn, player_one_name if player_one_turn else player_two_name) + "Enter column number for placing disc: ")
         if not col.isnumeric():
             continue
         col = int(col)
@@ -239,7 +247,7 @@ while True:
                 print("Connect4 Implemented by Rizwan Mustafa (A1 2021)")
                 print_board(board)
                 print()
-                print(f"{player_one_name if player_one_turn else player_two_name} wins!")
+                print(get_player_text(player_one_turn, player_one_name if player_one_turn else player_two_name) + "wins!")
 
                 user_choice = input("Play another game [Y/N]: ").lower()
                 if user_choice == "y":
@@ -257,7 +265,7 @@ while True:
                 print()
                 print_board(board)
                 print()
-                print(f"Draw between Player 1({player_one_name}) and Player 2({player_two_name})!")
+                print("Draw between " + get_player_text(True, player_one_name) + "and" + get_player_text(False, player_two_name) + "!")
 
                 user_choice = input("Play another game [Y/N]: ").lower()
                 if user_choice == "y":
@@ -272,6 +280,7 @@ while True:
 
         clear_console()
         break
+
     player_one_turn = not player_one_turn
 
 # TODO: Test, test and test this application
