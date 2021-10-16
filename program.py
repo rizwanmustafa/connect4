@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import os
+
 from colorama import init as coloroma_init, Fore, Style
 from typing import List
 
@@ -16,6 +18,7 @@ def create_empty_board() -> List[List[bool]]:
 
 
 def print_board(board: List[List[bool]]):
+    print("1 2 3 4 5 6 7")
     for row in board:
         for col in row:
             char = "_" if col == None else "X" if col == True else "O"
@@ -26,7 +29,7 @@ def print_board(board: List[List[bool]]):
 
 
 def drop_disc(board: List[List[bool]], playerOne: bool, col: int) -> bool:
-    if 1 > col or col > 7:
+    if 0 > col or col > 6:
         print("Column value out of bounds! It must be between 1 and 7 inclusive!")
         return -1
 
@@ -166,6 +169,15 @@ def get_decreasing_diagonal_count(row: int, col: int, board: List[List[bool]]) -
     return count
 
 
+def is_board_full(board: List[List[bool]]) -> bool:
+    for row in board:
+        for col in row:
+            if col == None:
+                return False
+
+    return True
+
+
 def is_valid_row_col(row: int = 0, col: int = 0) -> bool:
     if row < 0 or row > 5:
         return False
@@ -176,13 +188,85 @@ def is_valid_row_col(row: int = 0, col: int = 0) -> bool:
     return True
 
 
-# Debug statements
+def clear_console():
+    command = 'clear'
+    if os.name in ('nt', 'dos'):  # If Machine is running on Windows, use cls
+        command = 'cls'
+    os.system(command)
+
+
+# Variables for playing
+clear_console()
+
+player_one_name = input("Player 1 Name: ")
+player_two_name = input("Player 2 Name: ")
+clear_console()
+
 board = create_empty_board()
+player_one_turn: bool = True
 
-board[3][0] = True
-board[2][1] = True
-board[1][2] = True
-board[0][3] = True
+while True:
+    print("Connect4 Implemented by Rizwan Mustafa (A1 2021)")
+    print()
+    print_board(board)
+    print()
 
-print_board(board)
-print()
+    # Keep taking input from the user until correct column is entered
+    while True:
+
+        col = input(f"Player {1 if player_one_turn else 2} ({player_one_name if player_one_turn else player_two_name})  Enter column number for placing disc: ")
+        if not col.isnumeric():
+            continue
+        col = int(col)
+        if col < 1 or col > 7:
+            continue
+
+        col -= 1
+        row = drop_disc(board, player_one_turn, col)
+
+        if row != -1:
+            # The disc was placed, check for victory
+            max_count = max(
+                get_vertical_count(row, col, board),
+                get_horizontal_count(row, col, board),
+                get_increasing_diagonal_count(row, col, board),
+                get_decreasing_diagonal_count(row, col, board)
+            )
+
+            # If the player won, let them know
+            if max_count >= 4:
+                clear_console()
+                print_board(board)
+                print()
+                print(f"{player_one_name if player_one_turn else player_two_name} wins!")
+
+                user_choice = input("Play another game [Y/N]: ").lower()
+                if user_choice == "y":
+                    board = create_empty_board()
+                    player_one_turn = True
+                    break
+                else:
+                    exit()
+
+            # If there is a draw, let them know
+            if is_board_full(board):
+                clear_console()
+                print_board(board)
+                print()
+                print(f"Draw between Player 1({player_one_name}) and Player 2({player_two_name})!")
+
+                user_choice = input("Play another game [Y/N]: ").lower()
+                if user_choice == "y":
+                    board = create_empty_board()
+                    player_one_turn = True
+                    break
+                else:
+                    exit()
+        else:
+            continue
+
+        clear_console()
+        break
+    player_one_turn = not player_one_turn
+
+# TODO: Test, test and test this application
